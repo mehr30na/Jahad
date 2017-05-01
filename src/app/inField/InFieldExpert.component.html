@@ -1,0 +1,86 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3>لیست مزارع زیر کشت کارشناس</h3></div>
+  <div class="panel-body text-center">
+    <div class="container">
+      <div class="panel-body">
+        <div class="form-group">
+          <div class="col-md-12">لطفا استان مورد نظر را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="getAllTownShips($event.target.value)">
+              <option *ngFor="let item of provinces" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا شهرستان را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="getAllServiceCenters($event.target.value)">
+              <option *ngFor="let item of townShips" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا مرکز خدمات را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="getAllExperts($event.target.value)">
+              <option *ngFor="let item of serviceCenters" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا کارشناس را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="setExpert($event.target.value)">
+              <option *ngFor="let item of experts" [value]="item.nationalCode">{{item.firstName}} {{item.lastName}} ({{item.nationalCode}})</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا محصول مورد نظر را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="setProduct($event.target.value)">
+              <option *ngFor="let item of products" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="col-md-6 col-md-offset-3 alert alert-success" role="alert"><p> مجموع مساحت کشت شده: {{total}} متر مربع</p> </div>
+      <div class="row text-center">
+        <div *ngIf="res1" class="col-md-6 col-md-offset-3 alert alert-info">
+          <p ><a target="_blank" href="{{url}}/{{downloadUrl}}">دانلود فایل</a></p>
+        </div>
+        <table class="col-md-10 col-md-offset-1 tabel table-bordered table-striped table-condensed table-hover text-center"
+               style="width: 85%">
+          <caption>لیست مزارع زیر کشت کارشناس&nbsp;{{expert}}
+            <button class="btn btn-success" (click)="DownloadPdf(expertId,selectedProduct)">خروجی EXCEL</button>
+          </caption>
+
+          <tr>
+            <th>شماره</th>
+            <th>روستا</th>
+            <th>نام کشاورز</th>
+            <th>نام پدر</th>
+            <th>مختصات جغرافیایی</th>
+            <th>متراژ</th>
+            <th> تاریخ ثبت</th>
+            <th>حذف</th>
+          </tr>
+
+          <tr *ngFor="let item of displayData | paginate: { itemsPerPage: 10, currentPage: p }; let i=index;">
+            <td>{{i+1}}</td>
+            <td>{{item[1]}}</td>
+            <td>{{item[2]}}</td>
+            <td>{{item[3]}}</td>
+            <td>{{item[5]}}</td>
+            <td>{{item[6]}}</td>
+            <td>{{item[7]}}</td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="deleteInField(i,item)">
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </td>
+          </tr>
+
+        </table>
+
+      </div>
+      <div class="row text-center panel panel-success col-md-6 col-md-offset-3">
+        <pagination-controls (pageChange)="p = $event"></pagination-controls>
+      </div>
+    </div>
+  </div>
+</div>

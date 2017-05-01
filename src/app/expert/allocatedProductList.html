@@ -1,0 +1,64 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3>لیست متراژ مجاز</h3></div>
+  <div class="panel-body text-center">
+    <div class="container">
+      <div class="panel-body">
+        <div class="form-group">
+          <div class="col-md-6 col-md-offset-3">لطفا استان را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="getAllTownShips($event.target.value)">
+              <option *ngFor="let item of provinces" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا شهرستان را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="getAllServiceCenters($event.target.value)">
+              <option *ngFor="let item of townShips" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا مرکز خدمات را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="getAllExperts($event.target.value)">
+              <option *ngFor="let item of serviceCenters" [value]="item.id">{{item.title}}</option>
+            </select>
+          </div>
+          <div class="col-md-6 col-md-offset-3">لطفا کارشناس را انتخاب کنید</div>
+          <div class="col-md-6 col-md-offset-3">
+            <select class="form-control" (change)="setExpert($event.target.value)">
+              <option *ngFor="let item of experts" [value]="item.nationalCode">{{item.firstName}} {{item.lastName}} ({{item.nationalCode}})</option>
+            </select>
+          </div>
+          <!--<div class="col-md-6 col-md-offset-3">لطفا محصول را انتخاب کنید</div>-->
+          <!--<div class="col-md-6 col-md-offset-3">-->
+            <!--<select class="form-control" (change)="setProduct($event.target.value)">-->
+              <!--<option *ngFor="let item of products" [value]="item.id">{{item.title}}</option>-->
+            <!--</select>-->
+          <!--</div>-->
+        </div>
+      </div>
+      <table *ngIf="allocatedProducts" class="tabel table-bordered table-striped table-condensed table-hover text-center"
+             style="width: 85%">
+        <tr>
+          <td>شماره</td>
+          <td>نام محصول</td>
+          <td> متراژ </td>
+          <td>عملیات</td>
+        </tr>
+        <tr *ngFor="let item of allocatedProducts;let i = index">
+          <td *ngIf="item">{{i+1}}</td>
+          <td *ngIf="item">{{item.product.title}}</td>
+          <td *ngIf="item">{{item.area}}</td>
+          <td *ngIf="item">
+            <button class="btn btn-warning btn-sm" (click)="getOneProvince(item.id)" disabled>
+              <i class="glyphicon glyphicon-edit"></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteAllocated(item.id)">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+

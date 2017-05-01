@@ -1,0 +1,73 @@
+<div class="nav-side-menu">
+  <div class="brand"><img src="assets/img/logo1.png" width="70px"></div>
+  <i class="fa fa-bars fa-2x toggle-btn" data-toggle="collapse" data-target="#menu-content"></i>
+
+  <div class="menu-list">
+
+    <ul id="menu-content" class="menu-content collapse out">
+      <li>
+        <a href="#">
+          <i class="fa fa-dashboard fa-lg"></i>&nbsp; پنل مدیریت
+        </a>
+      </li>
+
+      <li data-toggle="collapse" data-target="#province" class="collapsed active">
+        <a><i class="fa fa-th-list"></i> استان <span class="arrow"></span></a>
+      </li>
+      <ul class="sub-menu collapse" id="province">
+        <li routerLink="provinces" class="active"><a >لیست استان ها</a></li>
+        <li routerLink="addProvinces"><a >اضافه کردن استان</a></li>
+      </ul>
+
+      <li data-toggle="collapse" data-target="#township" class="collapsed active">
+        <a><i class="fa fa-th-list"></i> شهرستان <span class="arrow"></span></a>
+      </li>
+      <ul class="sub-menu collapse" id="township">
+        <li routerLink="townShips" class="active" ><a>لیست شهرستان ها</a></li>
+        <li routerLink="addTownShip" class="active" ><a>اضافه کردن شهرستان</a></li>
+      </ul>
+
+      <li data-toggle="collapse" data-target="#servicecenter" class="collapsed active">
+        <a><i class="fa fa-th-list"></i> مراکز خدمات <span class="arrow"></span></a>
+      </li>
+      <ul class="sub-menu collapse" id="servicecenter">
+        <li routerLink="serviceCenters" class="active"><a >لیست مراکز</a></li>
+        <li routerLink="addServiceCenter" class="active"><a >اضافه کردن مرکز</a></li>
+      </ul>
+
+
+      <li data-toggle="collapse" data-target="#expert" class="collapsed active">
+        <a><i class="fa fa-th-list"></i> کارشناسان <span class="arrow"></span></a>
+      </li>
+      <ul class="sub-menu collapse" id="expert">
+        <li routerLink="experts" class="active"><a >لیست کارشناسان</a></li>
+        <li routerLink="addExpert" class="active"><a >اضافه کردن کارشناس</a></li>
+        <li routerLink="VillageList" class="active"><a >لیست روستاهای اختصاص یافته</a></li>
+        <li routerLink="VillageAllocate" class="active"><a >اختصاص روستا</a></li>
+        <li routerLink="ProductList" class="active"><a >لیست متراژ مجاز</a></li>
+        <li routerLink="ProductAllocate" class="active"><a >اضافه کردن متراژ مجاز</a></li>
+      </ul>
+
+      <li data-toggle="collapse" data-target="#products" class="collapsed active">
+        <a><i class="fa fa-th-list"></i> محصولات <span class="arrow"></span></a>
+      </li>
+      <ul class="sub-menu collapse" id="products">
+        <li routerLink="products" class="active"><a >لیست محصولات</a></li>
+        <li routerLink="addProduct" class="active"><a >اضافه کردن محصول</a></li>
+      </ul>
+
+
+      <li data-toggle="collapse" data-target="#infield" class="collapsed active">
+        <a><i class="fa fa-th-list"></i> مزارع زیر کشت <span class="arrow"></span></a>
+      </li>
+      <ul class="sub-menu collapse" id="infield">
+        <li routerLink="infieldTotal" class="active"><a >لیست مزارع زیر کشت استان</a></li>
+        <li routerLink="infieldTown" class="active"><a >لیست مزارع زیر کشت شهرستان</a></li>
+        <li routerLink="infieldCenter" class="active"><a >لیست مزارع زیر کشت مرکز خدمات</a></li>
+        <li routerLink="infieldExpert" class="active"><a >لیست مزارع زیر کشت کارشناس</a></li>
+      </ul>
+
+
+    </ul>
+  </div>
+</div>

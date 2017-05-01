@@ -1,0 +1,27 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3>اضافه کردن محصول</h3></div>
+  <div class="panel-body text-center">
+    <div class="container">
+      <div class="col-md-6 col-md-offset-3 panel-body">
+        <div class="row" *ngFor="let item of newProducts;let i = index">
+          <div class="col-md-1">
+            <button class="btn btn-success btn-sm" (click)="newProduct()">
+              <i class="glyphicon glyphicon-plus"></i>
+            </button>
+          </div>
+          <div class="col-md-10">
+            <input class="form-control" type="text" (change)="onChange($event.target.value,i)"
+                   placeholder="نام محصول جدید را وارد کنید">
+          </div>
+          <div class="col-md-1">
+            <button class="btn btn-danger btn-sm" (click)="deleteProduct(i)">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+          </div>
+        </div>
+      </div>
+      <button class="btn btn-success col-sm-2 col-sm-offset-5" (click)="addProducts()"> ثبت نهایی </button>
+
+    </div>
+    </div>
+  </div>

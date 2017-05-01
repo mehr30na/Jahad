@@ -1,0 +1,28 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3>لیست استان ها</h3></div>
+  <div class="panel-body text-center">
+    <div class="container">
+      <table class="tabel table-bordered table-striped table-condensed table-hover text-center" style="width: 85%">
+        <tr>
+          <td>شماره</td>
+          <td>نام</td>
+
+          <td>عملیات</td>
+        </tr>
+        <tr *ngFor="let item of provinces;let i = index">
+          <td>{{i+1}}</td>
+          <td>{{item.title}}</td>
+          <td>
+            <button class="btn btn-warning btn-sm" (click)="getOneProvince(item.id);">
+              <i class="glyphicon glyphicon-edit" disabled></i>
+            </button>
+            <button class="btn btn-sm btn-danger" (click)="deleteProvince(item.id)">
+              <i class="glyphicon glyphicon-remove"></i>
+            </button>
+          </td>
+        </tr>
+      </table>
+    </div>
+  </div>
+</div>
+

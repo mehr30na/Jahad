@@ -1,0 +1,44 @@
+<div class="panel panel-success">
+  <div class="panel-heading"><h3>اضافه کردن کارشناس</h3></div>
+  <div class="panel-body text-center">
+    <div class="container">
+      <div class="panel-body">
+        <div class="col-md-6 col-md-offset-3">لطفا استان را انتخاب کنید</div>
+        <div class="col-md-6 col-md-offset-3">
+          <select class="form-control" (change)="getAllTownShips($event.target.value)">
+            <option *ngFor="let item of provinces" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-md-offset-3">لطفا شهرستان را انتخاب کنید</div>
+        <div class="col-md-6 col-md-offset-3">
+          <select class="form-control" (change)="getAllServiceCenters($event.target.value)">
+            <option *ngFor="let item of townShips" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-md-offset-3">لطفا مرکز خدمات را انتخاب کنید</div>
+        <div class="col-md-6 col-md-offset-3">
+          <select class="form-control" (change)="getAllExperts($event.target.value)">
+            <option *ngFor="let item of serviceCenters" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-md-offset-3">لطفا کارشناس را انتخاب کنید</div>
+        <div class="col-md-6 col-md-offset-3">
+          <select class="form-control" (change)="setExpert($event.target.value)">
+            <option *ngFor="let item of experts" [value]="item.nationalCode">{{item.firstName}} {{item.lastName}} ({{item.nationalCode}})</option>
+          </select>
+        </div>
+        <div class="col-md-6 col-md-offset-3">لطفا محصول را انتخاب کنید</div>
+        <div class="col-md-6 col-md-offset-3">
+          <select class="form-control" (change)="setProduct($event.target.value)">
+            <option *ngFor="let item of products" [value]="item.id">{{item.title}}</option>
+          </select>
+        </div>
+      </div>
+      <div class="col-md-6 col-md-offset-3 panel-body">
+        <input class="form-control" type="number" (change)="onChange($event.target.value,i)"
+               placeholder="مساحت مورد نظر را وارد کنید">
+      </div>
+      <button class="btn btn-success col-sm-2 col-sm-offset-5" (click)="addAllocated()"> ثبت نهایی</button>
+    </div>
+  </div>
+</div>
