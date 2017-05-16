@@ -41,5 +41,10 @@ export class ProductService {
       .map(response=>response.json());
   }
 
+  getAllocatedProducts(expertId){
+    return this._http.get(this._url +'/product/parent/'+expertId)
+      .map(response=>response.json());
+  }
+
 
 }

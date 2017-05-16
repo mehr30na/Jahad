@@ -25,6 +25,7 @@ export class ServiceCenterComponent implements OnInit {
   townShipId:string;
   expert:Expert;
   experts:Array<Expert>;
+  private showLoader: boolean;
 
   constructor(private _route:ActivatedRoute,
               private townShipService:TownShipService,
@@ -33,39 +34,51 @@ export class ServiceCenterComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.provinceService.getProvinces().subscribe(res=>{
+    this.showLoader = true;
+    this.provinceService.getProvinces().subscribe(res=> {
       this.provinces = res;
       this.provinceId = this.provinces[0].id;
-      this.townShips = this.provinces[0].townShipList;
-      this.townShipId = this.townShips[0].id;
-      this.getAllServiceCenters(this.townShipId);
+      this.townShipService.getTownShips(this.provinceId).subscribe(res2 => {
+        this.townShips = res2;
+        this.townShipId = this.townShips[0].id;
+        this.getAllServiceCenters(this.townShipId);
+      });
+      // this.townShips = this.provinces[0].townShipList;
     });
   }
 
   getAllTownShips(event){
-    this.provinceService.getProvince(event).subscribe(res=> {
-      this.province = res;
-      this.townShips = this.province.townShipList;
+    this.showLoader = true;
+    this.townShipService.getTownShips(event).subscribe(res=> {
+      this.townShips = res;
       this.townShipId = this.townShips[0].id;
       if(this.townShipId){
         this.getAllServiceCenters(this.townShipId);
+        this.showLoader = false;
       }
     });
   }
   getAllServiceCenters(event){
-    this.townShipId=event;
-    this.townShipService.getTownShip(event).subscribe(res=> {
-      this.townShip = res;
-      this.serviceCenters = this.townShip.serviceCenterList;
+    this.showLoader = true;
+    this.serviceCenterService.getServiceCenters(event).subscribe(res=>{
+      this.serviceCenters = res;
+      this.showLoader = false;
     });
+
+    // this.townShipService.getTownShip(event).subscribe(res=> {
+    //   this.townShip = res;
+    //   this.serviceCenters = this.townShip.serviceCenterList;
+    // });
   }
 
   deleteCenter(id:string){
+    this.showLoader = true;
     if(confirm('آیا از حذف اطمینان دارید؟')) {
       this.serviceCenterService.deleteServiceCenter(id).subscribe(res=> {
         this.serviceCenters = null;
         this.townShip = res;
         this.serviceCenters = this.townShip.serviceCenterList;
+        this.showLoader = false;
       });
     }
   }

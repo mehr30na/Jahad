@@ -18,34 +18,41 @@ export class TownShipComponent implements OnInit {
   townShip:TownShip;
   response:string;
   province: Province;
+  private showLoader: boolean;
 
   constructor(private townShipService:TownShipService,
               private provinceService:ProvinceService
   ) { }
 
   ngOnInit() {
-      this.provinceService.getProvinces().subscribe(res=>{
-        this.provinces = res;
-        this.townShips = this.provinces[0].townShipList;
-        this.provinceId=this.provinces[0].id;
+    this.showLoader = true;
+      this.provinceService.getProvinces().subscribe(resP=>{
+        this.provinces = resP;
+        this.provinceId = this.provinces[0].id;
+        this.townShipService.getTownShips(this.provinceId).subscribe(resT=>{
+          this.townShips = resT;
+          this.showLoader = false;
+        });
+        // this.townShips = this.provinces[0].townShipList;
+        // this.provinceId=this.provinces[0].id;
       });
 
   }
 
   getAllTownShips(event){
-    this.provinceService.getProvince(event).subscribe(res=> {
-      this.province = res;
-      this.townShips = this.province.townShipList;
-      this.provinceId=this.province.id;
+    this.showLoader = true;
+    this.townShipService.getTownShips(event).subscribe(res=> {
+      this.townShips = res;
+      this.showLoader = false;
     });
   }
 
   deleteTownShip(id){
+    this.showLoader = true;
     if(confirm('آیا از حذف اطمینان دارید؟')) {
       this.townShipService.deleteTownShip(id).subscribe(res=> {
-        this.townShips=null;
-        this.province = res;
-        this.townShips=this.province.townShipList;
+        this.townShips=res;
+        this.showLoader = false;
       });
       // this.provinceService.getProvince(this.provinceId).subscribe(res=> {
       //   this.province = res;

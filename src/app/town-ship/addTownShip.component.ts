@@ -21,15 +21,18 @@ export class AddTownShipComponent implements OnInit{
   newTown:TownShip;
   newTownShips:Array<TownShip>=[];
   response:boolean=false;
+  private showLoader: boolean;
 
   constructor(private router:Router,
               private townShipService:TownShipService,
               private provinceService:ProvinceService) { }
 
   ngOnInit() {
+    this.showLoader = true;
     this.provinceService.getProvinces().subscribe(res=>{
       this.provinces = res;
       this.provinceId=this.provinces[0].id;
+      this.showLoader = false;
     });
     this.newTown = new TownShip();
     this.newTownShips.push(this.newTown);
@@ -40,6 +43,7 @@ export class AddTownShipComponent implements OnInit{
   }
 
   addTownShips(){
+    this.showLoader = true;
     this.townShipService.addTownShip(this.newTownShips, this.provinceId).subscribe(res=> {
       this.newTownShips=res;
       if(this.newTownShips){
@@ -48,7 +52,8 @@ export class AddTownShipComponent implements OnInit{
           'لطفا دکمه OK را بزنید',
           'success'
         );
-        this.router.navigateByUrl('townShips');
+        this.showLoader = false;
+        this.router.navigateByUrl('main/townShips');
         this.newTownShips=null;
       }
     });

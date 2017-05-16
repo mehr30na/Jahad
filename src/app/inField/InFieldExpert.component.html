@@ -1,3 +1,5 @@
+<app-loader *ngIf="showLoader"></app-loader>
+
 <div class="panel panel-success">
   <div class="panel-heading"><h3>لیست مزارع زیر کشت کارشناس</h3></div>
   <div class="panel-body text-center">
@@ -38,7 +40,9 @@
 
       </div>
 
-      <div class="col-md-6 col-md-offset-3 alert alert-success" role="alert"><p> مجموع مساحت کشت شده: {{total}} متر مربع</p> </div>
+      <div class="col-md-6 col-md-offset-3 alert alert-success" role="alert"><p> مجموع مساحت کشت شده برای کارشناس: {{sum}} متر مربع</p>
+        <br><button type="button" class="btn btn-primary" (click)="getTotalsum()">محاسبه</button>
+      </div>
       <div class="row text-center">
         <div *ngIf="res1" class="col-md-6 col-md-offset-3 alert alert-info">
           <p ><a target="_blank" href="{{url}}/{{downloadUrl}}">دانلود فایل</a></p>
@@ -58,25 +62,29 @@
             <th>متراژ</th>
             <th> تاریخ ثبت</th>
             <th>حذف</th>
+            <th>حذف گزینه های مشابه</th>
           </tr>
 
-          <tr *ngFor="let item of displayData | paginate: { itemsPerPage: 10, currentPage: p }; let i=index;">
+          <tr *ngFor="let item of infieldList | paginate: { itemsPerPage: 10, currentPage: p }; let i=index;">
             <td>{{i+1}}</td>
-            <td>{{item[1]}}</td>
-            <td>{{item[2]}}</td>
-            <td>{{item[3]}}</td>
-            <td>{{item[5]}}</td>
-            <td>{{item[6]}}</td>
-            <td>{{item[7]}}</td>
+            <td>{{item.village.title}}</td>
+            <td>{{item.farmerFirstName}} {{item.farmerLastName}}</td>
+            <td>{{item.farmerFatherName}}</td>
+            <td>{{item.farmLatitude}} {{item.farmLongitude}}</td>
+            <td>{{item.infieldArea}}</td>
+            <td>{{item.date}}</td>
             <td>
-              <button class="btn btn-sm btn-danger" (click)="deleteInField(i,item)">
+              <button class="btn btn-sm btn-danger" (click)="deleteInField(item.id)">
+                <i class="glyphicon glyphicon-remove"></i>
+              </button>
+            </td>
+            <td>
+              <button class="btn btn-sm btn-danger" (click)="deleteInFieldMoshabeh(item.id)">
                 <i class="glyphicon glyphicon-remove"></i>
               </button>
             </td>
           </tr>
-
         </table>
-
       </div>
       <div class="row text-center panel panel-success col-md-6 col-md-offset-3">
         <pagination-controls (pageChange)="p = $event"></pagination-controls>

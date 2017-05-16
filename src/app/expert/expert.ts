@@ -6,7 +6,7 @@ import {Village} from "../village/village";
 import {AllocatedProduct} from "../allocated-product/allocatedProduct";
 
 export class Expert{
-  id:string;
+
   nationalCode:string;
   firstName:string;
   email:string;

@@ -37,4 +37,10 @@ export class DownloadPdfService {
       .map(res => res.json());
   }
 
+  deleteItemMoshabeh(infieldId){
+    console.log("delete");
+    return this._http.delete(this._url+ '/infield/duplicate/'+infieldId)
+      .map(res => res.json());
+  }
+
 }

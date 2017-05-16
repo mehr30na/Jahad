@@ -15,6 +15,7 @@ export class ProvinceComponent implements OnInit {
   provinces:Array<Province>=[];
   province=new Province();
   response:string;
+  private showLoader: boolean;
 
   constructor(private provinceService:ProvinceService) { }
 
@@ -23,14 +24,18 @@ export class ProvinceComponent implements OnInit {
   }
 
   getAllProvinces(){
+    this.showLoader = true;
     this.provinceService.getProvinces().subscribe(res=> {
       this.provinces = res;
+      this.showLoader = false;
     });
   }
 
   getOneProvince(id:string){
+    this.showLoader = true;
     this.provinceService.getProvince(id).subscribe(res=> {
       this.province = res;
+      this.showLoader = false;
     });
   }
 
@@ -41,9 +46,13 @@ export class ProvinceComponent implements OnInit {
   }
 
   deleteProvince(id:string) {
+    this.showLoader = true;
     if(confirm('آیا از حذف اطمینان دارید؟')){
       this.provinceService.deleteProvince(id).subscribe(
-        res=>this.provinces = res
+        res=>{
+          this.provinces = res;
+          this.showLoader = false;
+        }
       );
     }
   }

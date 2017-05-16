@@ -33,13 +33,18 @@ export class ServiceCenterService {
       .map(res => res.json());
   }
 
-  getServiceCenters(){
-    return this._http.get(this._url +'/serviceCenter')
+  getServiceCenters(townShipId:string){
+    return this._http.get(this._url +'/serviceCenter/'+'parent/'+townShipId)
       .map(response=>response.json());
   }
 
   getServiceCenter(serviceCenterId:string){
     return this._http.get(this._url +'/serviceCenter/'+serviceCenterId)
+      .map(response=>response.json());
+  }
+
+  getTotalSum(serviceCenterId:string ,  pId:string){
+    return this._http.get(this._url +'/serviceCenter/totalSum/'+serviceCenterId+'/'+pId)
       .map(response=>response.json());
   }
 

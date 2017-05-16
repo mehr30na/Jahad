@@ -12,6 +12,7 @@ export class LoginComponent{
 
   user=new User();
   res:boolean=false;
+  private showLoader: boolean;
 
 
   constructor(private loginService:LoginService,
@@ -26,16 +27,21 @@ export class LoginComponent{
   }
 
   login(){
+
+    this.showLoader = true;
+    this.router.navigateByUrl('main');
     this.loginService.loginService(this.user).subscribe(res=>{
       this.res=res;
-      // if(this.res){
+      if(this.res){
         this.router.navigateByUrl('main');
-      // }
-      // else {
-      //   alert("نام کاربری یا رمز عبور اشتباه است");
-      // }
+      }
+      else {
+        alert("نام کاربری یا رمز عبور اشتباه است");
+      }
     });
+    this.showLoader = false;
     // this.router.navigateByUrl('main');
+
   }
 
 }

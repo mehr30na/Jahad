@@ -42,7 +42,12 @@ export class ProvinceService {
   getProvinces(){
     return this._http.get(this._url +'/province')
       .map(response=>response.json());
+  }
 
+  getTotalSum(provinceId:string ,  pId:string){
+
+    return this._http.get(this._url +'/province/totalSum/'+provinceId+'/'+pId)
+      .map(response=>response.json());
   }
 
 }

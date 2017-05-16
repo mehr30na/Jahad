@@ -9,6 +9,8 @@ import {ServiceCenter} from "../service-center/serviceCenter";
 import {TownShipService} from "../town-ship/town-ship.service";
 import {ServiceCenterService} from "../service-center/service-center.service";
 import {ProductService} from "../product/product.service";
+import {Village} from "../village/village";
+
 @Component({
   templateUrl:'./allocatedProductList.html'
 })
@@ -24,7 +26,11 @@ export class AllocatedProductList implements OnInit {
   private province:Province;
   private serviceCenterId:string;
   private townShip:TownShip;
+  private townShipId:string;
   private serviceCenter:ServiceCenter;
+  private provinceId: string;
+  private villages: Array<Village>;
+  private showLoader: boolean;
 
   constructor( private provinceService:ProvinceService,
                private expertService: ExpertService,
@@ -35,72 +41,112 @@ export class AllocatedProductList implements OnInit {
   }
 
   ngOnInit() {
+    this.showLoader = true;
     this.provinceService.getProvinces().subscribe(res=> {
       this.provinces = res;
-      this.townShips = this.provinces[0].townShipList;
-      this.serviceCenters=this.townShips[0].serviceCenterList;
-      this.experts=this.serviceCenters[0].expertList;
-      this.expertId=this.experts[0].nationalCode;
-      this.allocatedProducts = this.experts[0].allocatedProductList;
+      this.provinceId = this.provinces[0].id;
+      this.townShipService.getTownShips(this.provinceId).subscribe(res2=>{
+        this.townShips = res2;
+        if(this.townShips.length > 0 ) {
+          this.townShipId = this.townShips[0].id;
+          // this.showLoader = false;
+          this.serviceCenterService.getServiceCenters(this.townShipId).subscribe(res3 => {
+            this.serviceCenters = res3;
+            if (this.serviceCenters.length > 0) {
+              this.serviceCenterId = this.serviceCenters[0].id;
+              this.expertService.getExperts(this.serviceCenterId).subscribe(res => {
+                this.experts = res;
+                if (this.experts.length > 0) {
+                  this.expertId = this.experts[0].nationalCode;
+                    this.allocatedProducts = this.experts[0].allocatedProductList;
+                    this.showLoader = false;
+
+                }
+              });
+            }
+          });
+        } else {
+          this.showLoader = false
+        }
+      });
     });
   }
 
   getAllTownShips(event) {
-    this.provinceService.getProvince(event).subscribe(res=> {
-      this.province = res;
-      this.townShips=[];
-      this.serviceCenters=[];
-      if(this.province.townShipList.length>0)
-        this.townShips = this.province.townShipList;
-      if(this.townShips[0].serviceCenterList.length>0) {
-        this.serviceCenters = this.townShips[0].serviceCenterList;
-        this.serviceCenterId = this.serviceCenters[0].id;
-      }
-      if(this.serviceCenters[0].expertList.length>0) {
-        this.experts = this.serviceCenters[0].expertList;
-        this.expertId=this.experts[0].nationalCode;
-        this.allocatedProducts = this.experts[0].allocatedProductList;
+    this.showLoader = true;
+    this.townShipService.getTownShips(event).subscribe(res2=> {
+      this.townShips = res2;
+      if(this.townShips.length>0) {
+        this.townShipId = this.townShips[0].id;
+        this.serviceCenterService.getServiceCenters(this.townShipId).subscribe(res3 => {
+          this.serviceCenters = res3;
+          if(this.serviceCenters.length>0){
+            this.serviceCenterId = this.serviceCenters[0].id;
+            this.getAllExperts(this.serviceCenterId );
+            this.showLoader = false;
+          }else{
+            this.showLoader = false;
+            this.experts = [];
+          }
+
+        });
+      }else {
+        this.showLoader = false;
+        this.serviceCenters = [];
+        this.experts = [];
       }
     });
+
   }
 
   getAllServiceCenters(event) {
-    this.townShipService.getTownShip(event).subscribe(res=> {
-      this.townShip = res;
-      this.serviceCenters=[];
-      this.serviceCenters = this.townShip.serviceCenterList;
-      this.serviceCenterId = this.serviceCenters[0].id;
-      this.experts=this.serviceCenters[0].expertList;
-      this.expertId=this.experts[0].nationalCode;
-      this.allocatedProducts = this.experts[0].allocatedProductList;
+    this.showLoader = true;
+    this.serviceCenterService.getServiceCenters(event).subscribe(res3 => {
+      this.serviceCenters = res3;
+      if(this.serviceCenters.length>0){
+        this.serviceCenterId = this.serviceCenters[0].id;
+        this.getAllExperts(this.serviceCenterId );
+        this.showLoader = false;
+      }else{
+        this.showLoader = false;
+        this.experts = [];
+      }
     });
+    // this.showLoader = false;
   }
 
   getAllExperts(event) {
-    this.serviceCenterId = event;
-    this.serviceCenterService.getServiceCenter(this.serviceCenterId).subscribe(res=> {
-      this.serviceCenter = res;
-      this.experts=this.serviceCenter.expertList;
-      this.expertId=this.experts[0].nationalCode;
-      this.allocatedProducts = this.experts[0].allocatedProductList;
+    this.showLoader = true;
+    this.expertService.getExperts(event).subscribe(res=> {
+      this.experts = res;
+      if(this.experts.length>0){
+        this.expertId = this.experts[0].nationalCode;
+          this.allocatedProducts = this.experts[0].allocatedProductList;
+          this.showLoader = false;
+      }else{
+        this.experts = [];
+      }
     });
   }
 
 
   setExpert(value) {
+    this.showLoader = true;
     this.expertId = value;
     this.expertService.getExpert(this.expertId).subscribe(res => {
-      this.expert = res;
-      this.allocatedProducts = this.expert.allocatedProductList;
+      this.allocatedProducts = res.allocatedProductList;
+      this.showLoader = false;
     });
   }
 
   deleteAllocated(id){
+    this.showLoader = true;
     if(confirm('آیا از حذف اطمینان دارید؟')) {
       this.expertService.deleteAllocatedProduct(id).subscribe(res=> {
         this.allocatedProducts=null;
         this.expert= res;
         this.allocatedProducts=this.expert.allocatedProductList;
+        this.showLoader = false;
       });
     }
 

@@ -41,6 +41,7 @@ import {InFieldCenter} from "./inField/InFieldCenter.component";
 import {InFieldExpert} from "./inField/InFieldExpert.component";
 import {Ng2PaginationModule} from "ng2-pagination";
 import {DownloadPdfService} from "./inField/inFieldService";
+import { LoaderComponent } from './loader/loader.component';
 
 @NgModule({
   declarations: [
@@ -69,7 +70,8 @@ import {DownloadPdfService} from "./inField/inFieldService";
     InFieldProvince,
     InFieldTownShip,
     InFieldCenter,
-    InFieldExpert
+    InFieldExpert,
+    LoaderComponent
   ],
   imports: [
     BrowserModule,

@@ -38,8 +38,8 @@ export class ExpertService {
       .map(response=>response.json());
   }
 
-  getExperts(){
-    return this._http.get(this._url +'/expert')
+  getExperts(serviceCenterId){
+    return this._http.get(this._url +'/expert/parent/'+serviceCenterId)
       .map(response=>response.json());
   }
 
@@ -65,6 +65,17 @@ export class ExpertService {
   deleteAllocatedProduct(alProId:string){
     return this._http.delete(this._url+ '/allocatedProduct/'+alProId)
       .map(res => res.json());
+  }
+
+
+  getInfields(experId:string ,  pId:string){
+    return this._http.get(this._url +'/infield/parent/'+experId+'/'+pId+'/1/50')
+      .map(response=>response.json());
+  }
+
+  getTotalsum (experId,pId){
+    return this._http.get(this._url +'/infield/totalSum/'+experId+'/'+pId)
+      .map(response=>response.json());
   }
 
 }

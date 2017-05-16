@@ -38,8 +38,14 @@ export class TownShipService {
       .map(response=>response.json());
   }
 
-  getTownShips(townShipId:string){
-    return this._http.get(this._url +'/townShip/'+townShipId)
+  getTownShips(provinceId:string){
+    return this._http.get(this._url +'/townShip/'+'parent/'+provinceId)
+      .map(response=>response.json());
+  }
+
+  getTotalSum(townShipId:string ,  pId:string){
+
+    return this._http.get(this._url +'/townShip/totalSum/'+townShipId+'/'+pId)
       .map(response=>response.json());
   }
 

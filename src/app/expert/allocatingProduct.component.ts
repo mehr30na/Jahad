@@ -36,6 +36,7 @@ export class AllocatingProductComponent{
   allocatedProduct=new AllocatedProduct();
   newVillages:Array<Village>=[];
   products:Array<Product>;
+  private showLoader: boolean;
 
   constructor(private router:Router,
               private townShipService:TownShipService,
@@ -46,57 +47,91 @@ export class AllocatingProductComponent{
   }
 
   ngOnInit() {
+    this.showLoader = true;
     this.provinceService.getProvinces().subscribe(res=> {
       this.provinces = res;
       this.provinceId = this.provinces[0].id;
-      this.townShips = this.provinces[0].townShipList;
-      this.serviceCenters=this.townShips[0].serviceCenterList;
-      this.serviceCenterId=this.serviceCenters[0].id;
-      this.experts=this.serviceCenters[0].expertList;
-      this.expertId=this.experts[0].nationalCode;
+      this.townShipService.getTownShips(this.provinceId).subscribe(res2=>{
+        this.townShips = res2;
+        if(this.townShips.length > 0 ) {
+          this.townShipId = this.townShips[0].id;
+          this.showLoader = false;
+          this.serviceCenterService.getServiceCenters(this.townShipId).subscribe(res3 => {
+            this.serviceCenters = res3;
+            if (this.serviceCenters.length > 0) {
+              this.serviceCenterId = this.serviceCenters[0].id;
+              this.expertService.getExperts(this.serviceCenterId).subscribe(res => {
+                this.experts = res;
+                if (this.experts.length > 0) {
+                  this.expertId = this.experts[0].nationalCode;
+                  this.showLoader = false;
+
+                }
+              });
+            }
+          });
+        } else {
+          this.showLoader = false
+        }
+      });
     });
     this.productService.getProducts().subscribe(res=>{
       this.products=res;
       this.allocatedProduct.product=this.products[0];
+      this.showLoader = false;
     });
   }
 
   getAllTownShips(event) {
-    this.provinceService.getProvince(event).subscribe(res=> {
-      this.province = res;
-      this.townShips=[];
-      this.serviceCenters=[];
-      if(this.province.townShipList.length>0)
-        this.townShips = this.province.townShipList;
-      if(this.townShips[0].serviceCenterList.length>0) {
-        this.serviceCenters = this.townShips[0].serviceCenterList;
-        this.serviceCenterId = this.serviceCenters[0].id;
-      }
-      if(this.serviceCenters[0].expertList.length>0) {
-        this.experts = this.serviceCenters[0].expertList;
-        this.expertId=this.experts[0].nationalCode;
-      }
+    this.showLoader = true;
+    this.townShipService.getTownShips(event).subscribe(res2=> {
+      this.townShips = res2;
+      if(this.townShips.length>0) {
+        this.townShipId = this.townShips[0].id;
+        this.serviceCenterService.getServiceCenters(this.townShipId).subscribe(res3 => {
+          this.serviceCenters = res3;
+          if(this.serviceCenters.length>0){
+            this.serviceCenterId = this.serviceCenters[0].id;
+            this.getAllExperts(this.serviceCenterId );
+            this.showLoader = false;
+          }else{
+            this.experts = [];
+          }
 
+        });
+      }else {
+        this.serviceCenters = [];
+        this.experts = [];
+      }
     });
+    this.showLoader = false;
   }
 
   getAllServiceCenters(event) {
-    this.townShipService.getTownShip(event).subscribe(res=> {
-      this.townShip = res;
-      this.serviceCenters=[];
-      this.serviceCenters = this.townShip.serviceCenterList;
-      this.serviceCenterId = this.serviceCenters[0].id;
-      this.experts=this.serviceCenters[0].expertList;
-      this.expertId=this.experts[0].nationalCode;
+    this.showLoader = true;
+    this.serviceCenterService.getServiceCenters(event).subscribe(res3 => {
+      this.serviceCenters = res3;
+      if(this.serviceCenters.length>0){
+        this.serviceCenterId = this.serviceCenters[0].id;
+        this.getAllExperts(this.serviceCenterId );
+        this.showLoader = false;
+      }else{
+        this.experts = [];
+      }
     });
+    this.showLoader = false;
   }
 
   getAllExperts(event) {
-    this.serviceCenterId = event;
-    this.serviceCenterService.getServiceCenter(this.serviceCenterId).subscribe(res=> {
-      this.serviceCenter = res;
-      this.experts=this.serviceCenter.expertList;
-      this.expertId=this.experts[0].nationalCode;
+    this.showLoader = true;
+    this.expertService.getExperts(event).subscribe(res=> {
+      this.experts = res;
+      if(this.experts.length>0){
+        this.expertId = this.experts[0].nationalCode;
+        this.showLoader = false;
+      }else{
+        this.experts = [];
+      }
     });
   }
 
@@ -113,6 +148,7 @@ export class AllocatingProductComponent{
   }
 
   addAllocated(){
+    this.showLoader = true;
     this.expertService.addAllocated(this.allocatedProduct, this.expertId).subscribe(res=> {
       this.allocatedProduct=res;
       swal(
@@ -120,7 +156,8 @@ export class AllocatingProductComponent{
         'لطفا دکمه OK را بزنید',
         'success'
       );
-      this.router.navigateByUrl('/main/experts');
+      this.router.navigateByUrl('/main/ProductList');
+      this.showLoader = false;
     });
   }
 }

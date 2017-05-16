@@ -14,13 +14,16 @@ export class AddProductComponent implements OnInit{
 
   newProducts:Array<Product>=[];
   newPro:Product;
+  private showLoader: boolean;
 
   constructor(private router:Router,
               private productService:ProductService) { }
 
   ngOnInit(){
+    this.showLoader = true;
     this.newPro=new Product();
     this.newProducts.push(this.newPro);
+    this.showLoader = false;
   }
 
   onChange(value,i){
@@ -37,6 +40,7 @@ export class AddProductComponent implements OnInit{
   }
 
   addProducts(){
+    this.showLoader = true;
     this.productService.addProduct(this.newProducts).subscribe(res=> {
       this.newProducts=res;
       swal(
@@ -45,6 +49,7 @@ export class AddProductComponent implements OnInit{
         'success'
       );
       this.router.navigateByUrl('products');
+      this.showLoader = false;
     });
     this.newProducts=null;
     // for(let i=0;i<this.newTownShips.length;i++){

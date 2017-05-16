@@ -14,6 +14,10 @@ export class VillageService {
     return this._http.get(this._url +'/village/'+villageId)
       .map(response=>response.json());
   }
+  getVillages(exprtId:string){
+    return this._http.get(this._url +'/village/parent/'+exprtId)
+      .map(response=>response.json());
+  }
 
   deleteInField(id:string){
     return this._http.get(this._url +'/infield/'+id)

@@ -7,7 +7,7 @@ import {Router} from "@angular/router";
   styleUrls: ['./app.component.css']
 })
 export class AppComponent implements OnInit{
-  // @Input() responce:boolean;
+
   constructor(private router:Router){}
   ngOnInit(){
     this.router.navigateByUrl('login');

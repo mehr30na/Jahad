@@ -28,6 +28,7 @@ export class AddServiceCenterComponent implements OnInit{
   serviceCenters: Array<ServiceCenter>=[];
   townShipId: string;
   townShips: Array<TownShip>;
+  private showLoader: boolean;
 
 
   constructor(private router:Router,
@@ -38,21 +39,25 @@ export class AddServiceCenterComponent implements OnInit{
 
 
   ngOnInit() {
-    this.provinceService.getProvinces().subscribe(res=>{
+    this.showLoader = true;
+    this.provinceService.getProvinces().subscribe(res=> {
       this.provinces = res;
-      this.townShips = this.provinces[0].townShipList;
-      this.townShipId= this.townShips[0].id;
-      this.provinceId=this.provinces[0].id;
+      this.provinceId = this.provinces[0].id;
+      this.townShipService.getTownShips(this.provinceId).subscribe(res2 => {
+        this.townShips = res2;
+        this.townShipId = this.townShips[0].id;
+        this.showLoader = false;
+      });
     });
     this.serviceCente = new ServiceCenter();
     this.newServiceCenters.push(this.serviceCente);
   }
 
   getAllTownShips(event){
-    this.provinceService.getProvince(event).subscribe(res=> {
-      this.province = res;
-      this.townShips = this.province.townShipList;
-      this.townShipId= this.townShips[0].id;
+    this.showLoader = true;
+    this.townShipService.getTownShips(event).subscribe(res=> {
+      this.townShips = res;
+      this.showLoader = false;
     });
   }
 
@@ -61,6 +66,7 @@ export class AddServiceCenterComponent implements OnInit{
   }
 
   addServiceCenters(){
+    this.showLoader = true;
     this.serviceCenterService.addServiceCenter(this.newServiceCenters, this.townShipId).subscribe(res=> {
       this.newServiceCenters=res;
       if(this.newServiceCenters) {
@@ -69,8 +75,9 @@ export class AddServiceCenterComponent implements OnInit{
           'لطفا دکمه OK را بزنید',
           'success'
         );
-        this.router.navigateByUrl('serviceCenters');
+        this.router.navigateByUrl('main/serviceCenters');
         this.newServiceCenters=null;
+        this.showLoader = false;
         // let newTS=new ServiceCenter();
         // newTS.title="";
         // this.newServiceCenters.push(newTS);

@@ -4,7 +4,7 @@
 import {Component} from "@angular/core";
 import {ProvinceService} from "./province.service";
 import {Province} from "./province";
-import {ActivatedRoute, Router} from "@angular/router";
+import { Router} from "@angular/router";
 declare var swal: any;
 
 
@@ -18,10 +18,12 @@ export class AddProvinceComponent{
 
   province=new Province();
   response:boolean=false;
+  private showLoader: boolean;
   constructor(private provinceService:ProvinceService,private router:Router) {
   }
 
   addProvince(province:Province,$event){
+    this.showLoader = true;
     $event.preventDefault();
     this.provinceService.addProvince(province).subscribe(res=> {
       this.response=res;
@@ -31,7 +33,8 @@ export class AddProvinceComponent{
         'لطفا دکمه OK را بزنید',
           'success'
         )
-        this.router.navigateByUrl('/provinces');
+        this.showLoader = false;
+        this.router.navigateByUrl('main/provinces');
       }
     });
   }
